@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>今天吃什么？</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      text-align: center;
+      background: #f9f9f9;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+    }
+    #container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+    #result {
+      font-size: 2em;
+      margin: 30px 0;
+      height: 2em;
+      color: #ff5722;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    button {
+      padding: 12px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #ff9800, #ff5722);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:hover:not(:disabled) {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #ffb74d, #ff7043);
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>今天吃什么？</h1>
+  <div id="container">
+    <div id="result">🤔</div>
+    <button id="btn" onclick="toggleRolling()">开始</button>
+  </div>
+
+  <script>
+    const foods = [
+      "寿司","拉面","天妇罗","乌冬面","鳗鱼饭","亲子丼","牛肉丼","炸猪排","大阪烧","章鱼烧",
+      "刺身","味噌汤","关东煮","荞麦面","咖喱饭",
+      "火锅","麻辣烫","小笼包","煎饺","炒饭","宫保鸡丁","红烧肉","鱼香肉丝","酸辣汤","干锅牛蛙",
+      "水煮鱼","羊肉串","驴肉火烧","北京烤鸭","牛肉面","刀削面","凉皮","螺蛳粉","烤鱼","煲仔饭",
+      "泡菜锅","石锅拌饭","辣炒年糕","韩式炸鸡","冷面","烤五花肉",
+      "牛排","意大利面","披萨","汉堡","沙拉","热狗","三明治","薯条","墨西哥卷饼","炸鱼薯条",
+      "冰淇淋","奶茶","蛋糕","可丽饼","刨冰"
+    ];
+
+    let rolling = false;      // 是否正在滚动
+    let intervalId = null;    // 存 setInterval 的 ID
+    let clickCount = 0;       // 总点击次数
+
+    function toggleRolling() {
+      const btn = document.getElementById("btn");
+      const result = document.getElementById("result");
+
+      // 如果点击次数超过3次
+      if (clickCount >= 3 && !rolling) {
+        btn.disabled = true;
+        result.textContent = "这么挑剔，啥也别吃了！";
+        return;
+      }
+
+      if (!rolling) {
+        // 开始滚动
+        rolling = true;
+        btn.textContent = "停止";
+        clickCount++;  // 每开始一次计数
+
+        intervalId = setInterval(() => {
+          const randomFood = foods[Math.floor(Math.random() * foods.length)];
+          result.textContent = randomFood;
+        }, 100); // 100ms 切换一次
+      } else {
+        // 停止滚动
+        rolling = false;
+        btn.textContent = "开始";
+        clearInterval(intervalId);
+      }
+    }
+  </script>
+</body>
+</html>

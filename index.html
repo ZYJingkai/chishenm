@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>今日何を食べたい？</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      text-align: center;
+      background: #f9f9f9;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+      font-size: 2.2em; /* 标题放大 */
+      margin-bottom: 50px;
+    }
+    /* 去掉白框，直接用 body 背景 */
+    #container {
+      display: inline-block; /* 保持居中 */
+    }
+    #result {
+      font-size: 3em;  /* 放大结果文字 */
+      margin: 30px 0;
+      height: 2em;
+      color: #ff5722;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    button {
+      margin-top: 30px;   /* 按钮和文字间距 */
+      padding: 16px 40px; /* 按钮大小 */
+      font-size: 1.5em;   /* 按钮文字 */
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #ff9800, #ff5722);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:hover:not(:disabled) {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #ffb74d, #ff7043);
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>今日何を食べたい？</h1>
+  <div id="container">
+    <div id="result">🤔</div>
+    <button id="btn" onclick="toggleRolling()">開始</button>
+  </div>
+
+  <script>
+    const foods = [
+       "寿司","ラーメン","天ぷら","うどん","うな丼","親子丼","牛丼","とんかつ","お好み焼き","たこ焼き",
+  "刺身","味噌汁","おでん","そば","カレーライス",
+  "火鍋","麻辣湯","小籠包","焼き餃子","チャーハン","宮保鶏丁","紅焼肉","魚香肉絲","酸辣湯","干鍋牛蛙",
+  "水煮魚","羊串","ロバ肉バーガー","北京ダック","牛肉麺","刀削麺","涼皮","螺蛳粉","焼き魚","煲仔飯",
+  "キムチ鍋","石焼ビビンバ","トッポッキ","韓国風フライドチキン","冷麺","焼き豚バラ肉",
+  "ステーキ","スパゲッティ","ピザ","ハンバーガー","サラダ","ホットドッグ","サンドイッチ","フライドポテト","ブリトー","フィッシュ＆チップス",
+  "アイスクリーム","ミルクティー","ケーキ","クレープ","かき氷","定食","お金がないので食べない","何も食べない","餓死","カラスの刺身"
+    ];
+
+    let rolling = false;      // 是否正在滚动
+    let intervalId = null;    // 存 setInterval 的 ID
+    let clickCount = 0;       // 总点击次数
+
+    function toggleRolling() {
+      const btn = document.getElementById("btn");
+      const result = document.getElementById("result");
+
+      if (clickCount >= 3 && !rolling) {
+        btn.disabled = true;
+        result.innerHTML = "うるせーな、じゃあ食うなよ！<br>这么挑剔，啥也别吃了！";
+        return;
+      }
+
+      if (!rolling) {
+        rolling = true;
+        btn.textContent = "停止";
+        clickCount++;
+
+        intervalId = setInterval(() => {
+          const randomFood = foods[Math.floor(Math.random() * foods.length)];
+          result.textContent = randomFood;
+        }, 100);
+      } else {
+        rolling = false;
+        btn.textContent = "開始";
+        clearInterval(intervalId);
+      }
+    }
+  </script>
+</body>
+</html>
